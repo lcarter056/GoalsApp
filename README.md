@@ -2,7 +2,7 @@
 
 # Starting the App
 
-# First, start a device emumulator in android studio. To do so, open android studio then go to Tools>Device Manager> add a new device.
+### First, start a device emumulator in android studio. To do so, open android studio then go to Tools>Device Manager> add a new device.
 
 # Next open your 'GoalsApp' project directory in any terminal.
 # Run 'npx expo start' in your project folder. 
