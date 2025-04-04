@@ -9,6 +9,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfilePage from './pages/Profile';
 import ActivitiesPage from './pages/Activities';
 import GoalsPage from './pages/Goals';
+//weather api additions 
+//import weatherData from './api/weather';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,12 +18,13 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator initialRoutrName='Goals'>
-        <Tab.Screen name='Goals' component={GoalsPage}/>
-        <Tab.Screen name='Profile' component={ProfilePage}/>
-        <Tab.Screen name='Activities' component={ActivitiesPage}/>
+        <Tab.Screen name='Goals' component={GoalsPage} />
+        <Tab.Screen name='Profile' component={ProfilePage} />
+        <Tab.Screen name='Activities' component={ActivitiesPage} />
       </Tab.Navigator>
       <StatusBar style="auto" />
-     </NavigationContainer>
+    </NavigationContainer>
+   
   );
 }
 
