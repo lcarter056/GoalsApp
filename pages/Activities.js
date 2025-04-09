@@ -1,24 +1,40 @@
 import React, {useState, useEffect} from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigation } from "@react-navigation/native";
 import { View, Text, Button } from 'react-native';
 import fetchWeather from "../api/weather";
 
+
 export default function ActivitiesPage() {
   const [weather, setWeather] = useState(null);
-  const navigate = useNavigate();
+  const navigation = useNavigation();
+
+//temporary san antonio coordinates 
+  const lat = 29.42;
+  const long = -98.49;
+  var startDate = "2025-04-04";
+  var endDate = "2025-04-04";
+  const timeZone = "America/Denver";
+
+  const getDate = () => {
+     startDate = new Date().toISOString().slice(0,10);
+     endDate = new Date().toISOString().slice(0,10);
+  }
+
+  const loadPage = () => {
+    navigation.navigate(`Activity`);
+  }
 
   useEffect(() => {
     const getWeather = async () => {
-      const data = await fetchWeather();
+      getDate();
+      const data = await fetchWeather(lat, long, startDate, endDate, timeZone);
       setWeather(data);
     };
 
     getWeather(); 
   }, []);
 
-  const loadPage = () => {
-    navigate(`/Activity`);
-  }
+
   return (
     <View>
       <Text>Activities Page</Text>
@@ -28,8 +44,6 @@ export default function ActivitiesPage() {
       <Button title="Hang Out">  </Button>
       <Button title="Study Spot">  </Button>
 
-
-      <Text>{JSON.stringify(weather)}</Text>
     </View>
   );
 }  

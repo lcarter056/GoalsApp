@@ -1,21 +1,24 @@
 
 //temporary san antonio coordinates 
+/*
 const lat = 29.42;
 const long = -98.49;
 const startDate = "2025-04-04";
 const endDate = "2025-04-04";
 const timeZone = "America/Denver";
+*/
 
 
 
-const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m&temperature_unit=fahrenheit&start_date=${startDate}&end_date=${endDate}&timezone=${timeZone}`;
 
-async function fetchWeather() {
+
+async function fetchWeather(lat, long, startDate, endDate, timeZone) {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m&temperature_unit=fahrenheit&start_date=${startDate}&end_date=${endDate}&timezone=${timeZone}`;
 
     return await fetch(url)
     .then(response => {
       if (!response.ok) {
-        throw new Error('error with response');
+        throw new Error('error with response header');
       }
       return response.json();
     })
@@ -25,7 +28,7 @@ async function fetchWeather() {
 
       //create objects then return them 
       var weather = [];
-      // unharcode 25
+      // unharcode 24
       for (let i=0; i < 24; i++){
         weather.push({"Time": temptimes[i].split('T')[1], "Temp": temps[i]});
       }
@@ -34,7 +37,7 @@ async function fetchWeather() {
       
     })
     .catch(error => {
-    
+      console.error('Error when fetching weather', error);
     });
 
 }
