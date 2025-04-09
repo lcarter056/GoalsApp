@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { View, Text, Button } from 'react-native';
 import fetchWeather from "../api/weather";
-import ActivityPage from './Activity';
+import { useNavigation } from "@react-navigation/native";
 
 
 export default function ActivitiesPage() {
@@ -16,11 +16,14 @@ var startDate = "2025-04-04";
 var endDate = "2025-04-04";
 const timeZone = "America/Denver";
 
+const navigation = useNavigation();
+
   const getDate = () => {
     startDate = new Date().toISOString().slice(0,10);
     endDate = new Date().toISOString().slice(0,10);
  }
 
+  // socket.io
   useEffect(() => {
     const getWeather = async () => {
       getDate();
@@ -32,10 +35,14 @@ const timeZone = "America/Denver";
   }, []);
 
   return (
-    <View>
+    <View>      
       <Text>Activity Page</Text>
 
       <Text>{JSON.stringify(weather)}</Text>
+
+      <Button name ="Back" onPress={() => {
+        navigation.goBack();
+      } }> </Button>
     </View>
   );
 }  
