@@ -17,7 +17,7 @@ export default function ActivitiesPage() {
     <View>
       <Text>Activities Page</Text>
       <Button title="Exercise" onPress={loadPage}>  </Button>
-      <Button title="Restaurant" onPress={console.log("HEF")}>  </Button>
+      <Button title="Restaurant" onPress={console.log("Button pressed ")}>  </Button>
       <Button title="Hang Out">  </Button>
       <Button title="Study Spot">  </Button>
 

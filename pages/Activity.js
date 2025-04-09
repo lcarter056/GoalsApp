@@ -40,9 +40,7 @@ const navigation = useNavigation();
 
       <Text>{JSON.stringify(weather)}</Text>
 
-      <Button name ="Back" onPress={() => {
-        navigation.goBack();
-      } }> </Button>
+      
     </View>
   );
 }  
