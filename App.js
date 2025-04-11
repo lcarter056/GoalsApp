@@ -17,10 +17,10 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator initialRoutrName='Goals'>
         <Tab.Screen name='Goals' component={GoalsPage}/>
-        <Tab.Screen name="Settings" component={ActivityPage} options={{ tabBarButton: () => null }} // Hides the tab button for Activity
+        <Tab.Screen name='Settings' component={ActivityPage} options={{ tabBarButton: () => null }} // Hides the tab button for Activity
         />
         <Tab.Screen name='Profile' component={ProfilePage} />
-        <Tab.Screen name="Activity" component={ActivityPage} options={{ tabBarButton: () => null }} // Hides the tab button for Settingd
+        <Tab.Screen name='Activity' component={ActivityPage} options={{ tabBarButton: () => null }} // Hides the tab button for Settingd
         />
         <Tab.Screen name='Activities' component={ActivitiesPage} />
        
