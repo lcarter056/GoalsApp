@@ -2,32 +2,47 @@ import React, {useState, useEffect} from "react";
 import { View, Text, Button } from 'react-native';
 import fetchWeather from "../api/weather";
 import { useNavigation } from "@react-navigation/native";
+import activities from "../data/Activities";
+import { Activity } from '../data/ActivityClass'
 
 
 export default function ActivitiesPage( {route} ) {
   const [weather, setWeather] = useState(null);
   const { title, time } = route.params;
-
+  let acts = [];
   
 //temporary san antonio coordinates 
-const lat = 29.42;
-const long = -98.49;  
-var startDate = "2025-04-04";
-var endDate = "2025-04-04";
-const timeZone = "America/Denver";
-let sliced = [];
+  const lat = 29.42;
+  const long = -98.49;  
+  var startDate = "2025-04-04";
+  var endDate = "2025-04-04";
+  const timeZone = "America/Denver";
+  let sliced = [];
 
-const navigation = useNavigation();
+  const navigation = useNavigation();
+ 
+  for(let i=0; i < activities.length; i++){
+
+    acts.push(new Activity(activities[i].activity_name, 
+     activities[i].activity_category, 
+     activities[i].weather_condition,activities[i].time, 
+     activities[i].distance_campus));
+
+  }
 
   const getDate = () => {
     startDate = new Date().toISOString().slice(0,10);
     endDate = new Date().toISOString().slice(0,10);
  }
 
+  const getWeather = (temp) => {
+    // Clear Skies, Windy, or Rainy
+    
+  }
+
   const convertTime = (time) => {
     let sndDigit = parseInt(time.split(':')[0]) % 10;
     let num = parseInt(time.split(':')[0]);
-
     if(num < 13){
       return `${time}am`;
     }
@@ -76,6 +91,7 @@ const navigation = useNavigation();
        <Text>{title}</Text>
        <Text>{time}</Text>
       <Text>{weather}</Text>
+      <Text>{JSON.stringify(acts[0].name)}</Text>
       <Text>Temp Suggestion 1</Text>
       <Text>Temp Suggestion 2</Text>
     </View>
