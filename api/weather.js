@@ -1,6 +1,6 @@
 
 async function fetchWeather(lat, long, startDate, endDate, timeZone) {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&temperature_unit=fahrenheit&start_date=${startDate}&end_date=${endDate}&timezone=${timeZone} `;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code,wind_speed_10m&wind_speed_unit=mph&temperature_unit=fahrenheit&start_date=${startDate}&end_date=${endDate}&timezone=${timeZone} `;
 
     return await fetch(url)
     .then(response => {
@@ -10,19 +10,16 @@ async function fetchWeather(lat, long, startDate, endDate, timeZone) {
       return response.json();
     })
     .then(data => {
-      console.log(data);
       const temps = data.hourly.temperature_2m;
       const temptimes = data.hourly.time;
       const code = data.hourly.weather_code;
-      // windy 20mph < 
+      const wind = data.hourly.wind_speed_10m;
 
-      //create objects then return them 
+
       var weather = [];
-      // unharcode 24
-      for (let i=0; i < 24; i++){
-        weather.push({"time": temptimes[i].split('T')[1], "temp": temps[i], "code": code[i]});
+      for (let i=0; i < temps.length; i++){
+        weather.push({"time": temptimes[i].split('T')[1], "temp": temps[i], "code": code[i], "wind": wind[i]});
       }
-      console.log(weather);
       return weather;
       
     })

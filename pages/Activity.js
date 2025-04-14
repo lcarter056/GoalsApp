@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react";
-import { View, Text, Button } from 'react-native';
+import { View, Text} from 'react-native';
 import fetchWeather from "../api/weather";
-import { useNavigation } from "@react-navigation/native";
 import activities from "../data/Activities";
 import { Activity } from '../data/ActivityClass'
 
@@ -12,22 +11,18 @@ export default function ActivitiesPage( {route} ) {
   let acts = [];
   
 //temporary san antonio coordinates 
-  const lat = 29.42;
+  const lat = 29.42; 
   const long = -98.49;  
-  var startDate = "2025-04-04";
-  var endDate = "2025-04-04";
+  var startDate = "2025-02-11";
+  var endDate = "2025-02-11";
   const timeZone = "America/Denver";
   let sliced = [];
-
-  const navigation = useNavigation();
  
   for(let i=0; i < activities.length; i++){
-
     acts.push(new Activity(activities[i].activity_name, 
      activities[i].activity_category, 
      activities[i].weather_condition,activities[i].time, 
      activities[i].distance_campus));
-
   }
 
   const getDate = () => {
@@ -35,9 +30,29 @@ export default function ActivitiesPage( {route} ) {
     endDate = new Date().toISOString().slice(0,10);
  }
 
-  const getWeather = (temp) => {
-    // Clear Skies, Windy, or Rainy
-    
+  const getCode = (code, wind) => {
+    // Clear Skies 0-48, or Rainy 51 - 67, Snow 75 -77 Storm 95 - 99
+    if (wind > 19){
+      return "Windy";
+    }
+    else if (code > -1 && code < 49){
+      return "Clear Skies";
+    }
+    else if (code > 50 && code < 68){
+      return "Rainy";
+    }
+    else if (code > 74 && code < 78){
+      return "light Snow";
+    }
+    else if (code > 84 && code < 89){
+      return "Snow";
+    }
+    else if (code > 95 && code < 99){
+      return "Thunderstorm";
+    }
+    else {
+      return JSON.stringify(code);
+    }
   }
 
   const convertTime = (time) => {
@@ -55,10 +70,9 @@ export default function ActivitiesPage( {route} ) {
     
   }
   
-  // socket.io
-  useEffect(() => {
+  useEffect(() => { 
     const getWeather = async () => {
-       getDate();
+      getDate();
       const data = await fetchWeather(lat, long, startDate, endDate, timeZone);
       
       if (time == 'Morning'){
@@ -74,16 +88,16 @@ export default function ActivitiesPage( {route} ) {
       if (sliced != null){
         var temper = []
         for (let i=0; i < sliced.length; i++){
-         temper.push(`${convertTime(sliced[i].time)}: ${sliced[i].temp} F\n`);
+         temper.push(`${convertTime(sliced[i].time)}: ${sliced[i].temp} F Description: ${getCode(sliced[i].code, sliced[i].wind)}\n`);
         }
         setWeather(temper);
-        
-
         }
+
       
     };
 
-    getWeather(); 
+    getWeather();
+
   }, [time]);
 
   return (
