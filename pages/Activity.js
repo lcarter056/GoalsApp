@@ -1,18 +1,29 @@
-import React, {useState, useEffect} from "react";
-import { View, Text} from 'react-native';
+import React, {useState, useEffect, act} from "react";
+import { View, Text, Button} from 'react-native';
 import fetchWeather from "../api/weather";
 import activities from "../data/Activities";
-import { Activity } from '../data/ActivityClass'
+import { Activity } from '../data/ActivityClass';
+import DropDownPicker from 'react-native-dropdown-picker';
+
 
 
 export default function ActivitiesPage( {route} ) {
   const [weather, setWeather] = useState(null);
+  const [activity1, setActivity1] = useState('');
+  const [activity2, setActivity2] = useState('');
+
+   const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [hour, setHour] = useState([]);
+    
+
   const { title, time } = route.params;
+  
   let acts = [];
   
 //temporary san antonio coordinates 
-  const lat = 29.42; 
-  const long = -98.49;  
+  const lat = 29.42;  // gps values
+  const long = -98.49;   //gps values
   var startDate = "2025-02-11";
   var endDate = "2025-02-11";
   const timeZone = "America/Denver";
@@ -30,8 +41,18 @@ export default function ActivitiesPage( {route} ) {
     endDate = new Date().toISOString().slice(0,10);
  }
 
+  
+  const getDropDown = (weatherData) => {
+    //what about null drop down from activity page // check this
+   let hours = [];
+    for(let i=0; i< weatherData.length; i++){
+      hours.push({label : convertTime(weatherData[i].time) , value: i}); 
+    }
+    setHour(hours);
+  }
+
   const getCode = (code, wind) => {
-    // Clear Skies 0-48, or Rainy 51 - 67, Snow 75 -77 Storm 95 - 99
+    // Clear Skies 0-48, or Rainy 51 - 67, Snow 75 -77 Storm 95 - 99, no code should be missing go from 0-100
     if (wind > 19){
       return "Windy";
     }
@@ -54,6 +75,7 @@ export default function ActivitiesPage( {route} ) {
       return JSON.stringify(code);
     }
   }
+  
 
   const convertTime = (time) => {
     let sndDigit = parseInt(time.split(':')[0]) % 10;
@@ -70,6 +92,33 @@ export default function ActivitiesPage( {route} ) {
     
   }
   
+  useEffect(() => {
+    //suggest Activity function
+    //drop down for morning doesnt have 10 and 11, can only hold 5 elems? 
+    if (weather != null){
+     
+   let filteredActivites = acts.filter(act => act.weather == (weather[value]).description && (act.time).includes(time) && (act.category) == title); 
+      let x = Math.floor(Math.random(0, filteredActivites.length/2));
+      let y = Math.floor(Math.random((filteredActivites.length/2) + 1,filteredActivites.length));
+     
+      //clean up code should have at least one/ two activites for each hour
+      if (filteredActivites.length > 1) { 
+      setActivity1(filteredActivites[x].name);
+      setActivity2(filteredActivites[y].name);
+      }
+      else {
+        setActivity1(filteredActivites[0].name);
+        setActivity2('');
+      }
+      
+    }
+   
+  }, [value]);
+
+
+
+
+
   useEffect(() => { 
     const getWeather = async () => {
       getDate();
@@ -88,11 +137,13 @@ export default function ActivitiesPage( {route} ) {
       if (sliced != null){
         var temper = []
         for (let i=0; i < sliced.length; i++){
-         temper.push(`${convertTime(sliced[i].time)}: ${sliced[i].temp} F Description: ${getCode(sliced[i].code, sliced[i].wind)}\n`);
+         temper.push({'time': `${convertTime(sliced[i].time)}`, 'temp' : `${sliced[i].temp} F`, 
+         'description' : `${getCode(sliced[i].code, sliced[i].wind)}`});
         }
         setWeather(temper);
+        getDropDown(sliced); //set these as same variables ^
         }
-
+         
       
     };
 
@@ -104,10 +155,16 @@ export default function ActivitiesPage( {route} ) {
     <View>      
        <Text>{title}</Text>
        <Text>{time}</Text>
-      <Text>{weather}</Text>
-      <Text>{JSON.stringify(acts[0].name)}</Text>
-      <Text>Temp Suggestion 1</Text>
-      <Text>Temp Suggestion 2</Text>
+      <Text>{JSON.stringify(weather)}</Text>
+
+      <DropDownPicker items={hour} open={open} 
+      value={value} setOpen={setOpen} setValue={setValue} onChange={item => {setValue(item.value)}}
+        setItems={setHour} placeholder="Select time">
+        Preferred Hour
+      </DropDownPicker>
+
+      <Text>We suggest you go to {JSON.stringify(activity1)}!</Text>
+      <Text>Another suggestion is to go to {JSON.stringify(activity2)}!</Text>
     </View>
   );
 }  

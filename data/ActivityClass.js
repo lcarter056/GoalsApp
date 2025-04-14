@@ -10,11 +10,6 @@ class Activity {
         this.distance = distance;
     }
 
-    suggestActivity(weather, time, activites){
-     // DO
-    }
-
-
     favActivity(activity){
     favActivities.push(activity);
     }
