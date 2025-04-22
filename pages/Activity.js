@@ -1,28 +1,34 @@
 import React, {useState, useEffect} from "react";
-import { View, Text} from 'react-native';
+import { View, Text } from 'react-native';
 import fetchWeather from "../api/weather";
 import activities from "../data/Activities";
-import { Activity } from '../data/ActivityClass'
+import { Activity } from '../data/ActivityClass';
+import DropDownPicker from 'react-native-dropdown-picker';
+
 
 
 export default function ActivitiesPage( {route} ) {
   const [weather, setWeather] = useState(null);
-  const { title, time } = route.params;
+  const [activity1, setActivity1] = useState('');
+  const [activity2, setActivity2] = useState('');
+
+   const [open, setOpen] = useState(false);
+   const [value, setValue] = useState(null);
+   const [hour, setHour] = useState([]);
+    
+
+  const { title, time, lat, long } = route.params;
   let acts = [];
-  
-//temporary san antonio coordinates 
-  const lat = 29.42; 
-  const long = -98.49;  
-  var startDate = "2025-02-11";
-  var endDate = "2025-02-11";
+  var startDate = "";
+  var endDate = "";
   const timeZone = "America/Denver";
   let sliced = [];
  
   for(let i=0; i < activities.length; i++){
     acts.push(new Activity(activities[i].activity_name, 
      activities[i].activity_category, 
-     activities[i].weather_condition,activities[i].time, 
-     activities[i].distance_campus));
+     activities[i].weather_condition, activities[i].time, 
+     activities[i].distance_campus, activities[i].address));
   }
 
   const getDate = () => {
@@ -30,31 +36,40 @@ export default function ActivitiesPage( {route} ) {
     endDate = new Date().toISOString().slice(0,10);
  }
 
+  
+  const getDropDown = (weatherData) => {
+    //what about null drop down from activity page // TODO
+   let hours = [];
+    for(let i=0; i< weatherData.length; i++){
+      hours.push({label : weatherData[i].time, value: i}); 
+    }
+    setHour(hours);
+  }
+
   const getCode = (code, wind) => {
-    // Clear Skies 0-48, or Rainy 51 - 67, Snow 75 -77 Storm 95 - 99
     if (wind > 19){
       return "Windy";
     }
-    else if (code > -1 && code < 49){
+    else if (code > -1 && code < 50){
       return "Clear Skies";
     }
-    else if (code > 50 && code < 68){
+    else if (code > 49 && code < 70 || code == 81 || code == 82 || code == 80 ){
       return "Rainy";
     }
-    else if (code > 74 && code < 78){
-      return "light Snow";
+    else if (code > 69 && code < 80){
+      return "Light Snow";
     }
-    else if (code > 84 && code < 89){
+    else if (code > 82 && code < 95){
       return "Snow";
     }
-    else if (code > 95 && code < 99){
+    else if (code > 94 && code < 100){
       return "Thunderstorm";
     }
     else {
       return JSON.stringify(code);
     }
   }
-
+  
   const convertTime = (time) => {
     let sndDigit = parseInt(time.split(':')[0]) % 10;
     let num = parseInt(time.split(':')[0]);
@@ -62,21 +77,57 @@ export default function ActivitiesPage( {route} ) {
       return `${time}am`;
     }
     else if (num > 12 && num < 20){
-      return `${sndDigit -2}:00pm`;
+      return `${sndDigit-2}:00pm`;
     }
     else {
-      return `${10 + (sndDigit - 2)}:00pm`;
+      return `${10 + (sndDigit-2)}:00pm`;
     }
     
   }
   
+  useEffect(() => {
+
+    if (weather != null){
+      /*
+      let timetag = time;
+      if(timetag == null){
+        timetag = "Evening";
+      }
+        */
+     
+   let filteredActivites = acts.filter(act => act.weather == (weather[value]).description && (act.time).includes(time) && (act.category) == title); 
+      let midPoint = Math.floor((filteredActivites.length-1)/ 2);
+      let x = Math.floor(Math.random() * (midPoint+1));
+      let y = Math.floor(Math.random() * (filteredActivites.length - midPoint - 1) + midPoint + 1); 
+     
+      if (filteredActivites.length > 1) { 
+      setActivity1(filteredActivites[x].name);
+      setActivity2(filteredActivites[y].name);
+      }
+
+      else if(filteredActivites.length == 1){
+        setActivity1(filteredActivites[0].name);
+        setActivity2('');
+      }
+      else {
+        setActivity1('');
+        setActivity2('');
+      }
+    }
+   
+  }, [value]);
+
+
+
+
+
   useEffect(() => { 
     const getWeather = async () => {
       getDate();
       const data = await fetchWeather(lat, long, startDate, endDate, timeZone);
-      
+
       if (time == 'Morning'){
-        sliced = data.slice(5, 12);
+        sliced = data.slice(6, 12);
       }
       else if (time == 'Afternoon'){
         sliced = data.slice(13, 18);
@@ -88,11 +139,15 @@ export default function ActivitiesPage( {route} ) {
       if (sliced != null){
         var temper = []
         for (let i=0; i < sliced.length; i++){
-         temper.push(`${convertTime(sliced[i].time)}: ${sliced[i].temp} F Description: ${getCode(sliced[i].code, sliced[i].wind)}\n`);
+         temper.push({'time': `${convertTime(sliced[i].time)}`, 'temp' : `${sliced[i].temp} F`, 
+         'description' : `${getCode(sliced[i].code, sliced[i].wind)}`});
         }
         setWeather(temper);
+        if (temper){
+         getDropDown(temper); 
         }
-
+      }
+         
       
     };
 
@@ -104,10 +159,17 @@ export default function ActivitiesPage( {route} ) {
     <View>      
        <Text>{title}</Text>
        <Text>{time}</Text>
-      <Text>{weather}</Text>
-      <Text>{JSON.stringify(acts[0].name)}</Text>
-      <Text>Temp Suggestion 1</Text>
-      <Text>Temp Suggestion 2</Text>
+
+      <Text>{JSON.stringify(weather)}</Text>
+
+      <DropDownPicker items={hour} open={open} 
+      value={value} setOpen={setOpen} setValue={setValue} onChange={item => {setValue(item.value)}}
+        setItems={setHour} placeholder="Select time">
+        Preferred Hour
+      </DropDownPicker>
+
+      <Text>Suggestion 1:{JSON.stringify(activity1)}!</Text>
+      <Text>Suggestion 2:{JSON.stringify(activity2)}!</Text>
     </View>
   );
 }  

@@ -1,0 +1,8 @@
+2025.04.19 15:10:12 INFO  tracing is disabled for protocol LSP, to enable tracing of incoming and outgoing JSON messages create an empty file at c:\Users\laila\Downloads\MobileAppProj\GoalApp\my-expo-app\pages\.metals\lsp.trace.json or C:\Users\laila\AppData\Local\scalameta\metals\cache\lsp.trace.json
+2025.04.19 15:10:20 INFO  logging to files C:\Users\laila\Downloads\MobileAppProj\GoalApp\my-expo-app\pages\.metals\metals.log
+2025.04.19 15:10:20 INFO  Started: Metals version 1.5.2 in folders 'C:\Users\laila\Downloads\MobileAppProj\GoalApp\my-expo-app\pages' for client Visual Studio Code 1.99.3.
+2025.04.19 15:10:24 WARN  no build tool detected in workspace 'C:\Users\laila\Downloads\MobileAppProj\GoalApp\my-expo-app\pages'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2025.04.19 15:10:25 WARN  Build server is not auto-connectable.
+2025.04.19 15:11:55 INFO  Shutting down server
+2025.04.19 15:11:55 INFO  shutting down Metals
+2025.04.19 15:11:55 INFO  Exiting server
