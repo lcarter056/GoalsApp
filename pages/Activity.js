@@ -88,22 +88,29 @@ export default function ActivitiesPage( {route} ) {
   useEffect(() => {
 
     if (weather != null){
+      /*
+      let timetag = time;
+      if(timetag == null){
+        timetag = "Evening";
+      }
+        */
      
    let filteredActivites = acts.filter(act => act.weather == (weather[value]).description && (act.time).includes(time) && (act.category) == title); 
-      let midPoint = Math.floor(filteredActivites.length-1 / 2);
-      let x = Math.floor(Math.random() * (midPoint-1) - 0) + 0;
-      let y = Math.floor(Math.random() * (filteredActivites.length- midPoint +1) + midPoint - 1); 
-      console.log('x: ', x, 'y: ', y, 'mid: ', midPoint, 'len: ', filteredActivites.length);
+      let midPoint = Math.floor((filteredActivites.length-1)/ 2);
+      let x = Math.floor(Math.random() * (midPoint+1));
+      let y = Math.floor(Math.random() * (filteredActivites.length - midPoint - 1) + midPoint + 1); 
      
-      //clean up code should have at least one/ two activites for each hour / 
-      // RESTARUNT IN EVENING 
       if (filteredActivites.length > 1) { 
-      setActivity1(filteredActivites[x]);
-      setActivity2(filteredActivites[y]);
+      setActivity1(filteredActivites[x].name);
+      setActivity2(filteredActivites[y].name);
       }
 
+      else if(filteredActivites.length == 1){
+        setActivity1(filteredActivites[0].name);
+        setActivity2('');
+      }
       else {
-        setActivity1(filteredActivites[0]);
+        setActivity1('');
         setActivity2('');
       }
     }
@@ -161,8 +168,8 @@ export default function ActivitiesPage( {route} ) {
         Preferred Hour
       </DropDownPicker>
 
-      <Text>We suggest you go to {JSON.stringify(activity1)}!</Text>
-      <Text>Another suggestion is to go to {JSON.stringify(activity2)}!</Text>
+      <Text>Suggestion 1:{JSON.stringify(activity1)}!</Text>
+      <Text>Suggestion 2:{JSON.stringify(activity2)}!</Text>
     </View>
   );
 }  

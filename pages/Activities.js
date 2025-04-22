@@ -17,7 +17,11 @@ export default function ActivitiesPage() {
 
 //GPS fix: 4-6 okay, <4 good, >9
   const loadPage = (page) => {
-    navigation.navigate(`Activity` , {title : page, time : value});
+    let valueTag = value;
+    if (valueTag == null){
+      valueTag = "Evening";
+    }
+    navigation.navigate(`Activity` , {title : page, time : valueTag});
   }
 
   return (

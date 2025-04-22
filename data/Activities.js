@@ -10,6 +10,14 @@ const activities = [
           "address": "651 Devine Rd. San Antonio, TX 78212"
         },
         {
+          "activity_name": "Judson Nature Trails",
+          "activity_category": "Exercise",
+          "weather_condition": "Clear Skies",
+          "time": ["Morning", "Afternoon"],
+          "distance_campus": "2.2",
+          "address": "246 Viesca St, Alamo Heights, TX 78209"
+        },
+        {
           "activity_name": "Trinity Bell Center",
           "activity_category": "Exercise",
           "weather_condition": "Windy",
@@ -24,6 +32,22 @@ const activities = [
           "time": ["Afternoon", "Evening"],
           "distance_campus": "0",
           "address": ""
+        },
+        {
+          "activity_name": "Youtube Workout Channel's: 'Juice & Toya' or 'Body Project'",
+          "activity_category": "Exercise",
+          "weather_condition": "Clear Skies",
+          "time": ["Afternoon", "Evening"],
+          "distance_campus": "0",
+          "address": ""
+        },
+        {
+          "activity_name": "Anytime Fitness gym",
+          "activity_category": "Exercise",
+          "weather_condition": "Clear Skies",
+          "time": ["Afternoon", "Evening"],
+          "distance_campus": "1.0",
+          "address": "4200 McCullough Ave, San Antonio, TX 78212"
         },
         
         {
@@ -50,6 +74,40 @@ const activities = [
           "distance_campus": "1.8",
           "address": "2600 Broadway Ave San Antonio, TX 78215"
         },
+        {
+          "activity_name": "First Watch",
+          "activity_category": "Restaurant",
+          "weather_condition": "Clear Skies",
+          "time": ["Morning"],
+          "distance_campus": "4.9",
+          "address": "830 Northwest Loop 410 Suite 107, San Antonio, TX 78216"
+        },
+        {
+          "activity_name": "Alamo Biscuit Company & Panaderia - River Walk",
+          "activity_category": "Restaurant",
+          "weather_condition": "Clear Skies",
+          "time": ["Morning"],
+          "distance_campus": "3.0",
+          "address": "849 E Commerce St #197, San Antonio, TX 78205"
+        },
+        {
+          "activity_name": "Tower of the Americas",
+          "activity_category": "Restaurant",
+          "weather_condition": "Clear Skies",
+          "time": ["Evening"],
+          "distance_campus": "2.7",
+          "address": "739 E Cesar E. Chavez Blvd, San Antonio, TX 78205"
+        },
+        {
+          "activity_name": "Antlers Lodge (closes at 9pm)",
+          "activity_category": "Restaurant",
+          "weather_condition": "Clear Skies",
+          "time": ["Evening"],
+          "distance_campus": "17.2",
+          "address": "9800 Hyatt Resort Dr San Antonio, TX 78251"
+        },
+
+
         {
           "activity_name": "Hot Dogs Los Guanajuatenses",
           "activity_category": "Restaurant",
@@ -202,6 +260,46 @@ const activities = [
           "time": ["Morning"],
           "distance_campus": "0.6",
           "address": "3233 N St Mary's St #102, San Antonio, TX 78212"
+        },
+        {
+          "activity_name": "Revolución coffee",
+          "activity_category": "Study Spot",
+          "weather_condition": "Clear Skies",
+          "time": ["Morning"],
+          "distance_campus": "0.8",
+          "address": "223 E Hildebrand Ave #101b, San Antonio, TX 78212"
+        },
+        {
+          "activity_name": "WOO RI TEAHOUSE (boba)",
+          "activity_category": "Study Spot",
+          "weather_condition": "Clear Skies",
+          "time": ["Afternoon", "Evening"],
+          "distance_campus": "1.8",
+          "address": "4009 Broadway, San Antonio, TX 78209"
+        },
+        {
+          "activity_name": "Premium Matcha Cafe Maiko",
+          "activity_category": "Study Spot",
+          "weather_condition": "Clear Skies",
+          "time": ["Afternoon"],
+          "distance_campus": "6.8",
+          "address": "7115 Blanco Rd Suite 112, San Antonio, TX 78216"
+        },
+        {
+          "activity_name": "Dolph Briscoe, Jr. Library",
+          "activity_category": "Study Spot",
+          "weather_condition": "Clear Skies",
+          "time": ["Evening"],
+          "distance_campus": "12.8",
+          "address": "7703 Floyd Curl Dr, San Antonio, TX 78229"
+        },
+        {
+          "activity_name": "Halcyon Southtown",
+          "activity_category": "Study Spot",
+          "weather_condition": "Clear Skies",
+          "time": ["Afternoon", "Evening"],
+          "distance_campus": "5.0",
+          "address": "1414 S Alamo St, San Antonio, TX 78210"
         },
         {
           "activity_name": "Indoor Baking night",
