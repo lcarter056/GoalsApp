@@ -41,7 +41,7 @@ export default function ActivitiesPage( {route} ) {
     //what about null drop down from activity page // TODO
    let hours = [];
     for(let i=0; i< weatherData.length; i++){
-      hours.push({label : convertTime(weatherData[i].time), value: i}); 
+      hours.push({label : weatherData[i].time, value: i}); 
     }
     setHour(hours);
   }
@@ -77,30 +77,33 @@ export default function ActivitiesPage( {route} ) {
       return `${time}am`;
     }
     else if (num > 12 && num < 20){
-      return `${sndDigit -2}:00pm`;
+      return `${sndDigit-2}:00pm`;
     }
     else {
-      return `${10 + (sndDigit - 2)}:00pm`;
+      return `${10 + (sndDigit-2)}:00pm`;
     }
     
   }
   
   useEffect(() => {
-    //drop down for morning doesnt have 10 and 11, can only hold 5 elems? //TODO
+
     if (weather != null){
      
    let filteredActivites = acts.filter(act => act.weather == (weather[value]).description && (act.time).includes(time) && (act.category) == title); 
-      let x = Math.floor(Math.random(0, filteredActivites.length-1/2));
-      let y = Math.floor(Math.random((filteredActivites.length-1/2) + 1, filteredActivites.length-1));
+      let midPoint = Math.floor(filteredActivites.length-1 / 2);
+      let x = Math.floor(Math.random() * (midPoint-1) - 0) + 0;
+      let y = Math.floor(Math.random() * (filteredActivites.length- midPoint +1) + midPoint - 1); 
+      console.log('x: ', x, 'y: ', y, 'mid: ', midPoint, 'len: ', filteredActivites.length);
      
       //clean up code should have at least one/ two activites for each hour / 
+      // RESTARUNT IN EVENING 
       if (filteredActivites.length > 1) { 
-      setActivity1(filteredActivites[x].name);
-      setActivity2(filteredActivites[y].name);
+      setActivity1(filteredActivites[x]);
+      setActivity2(filteredActivites[y]);
       }
 
       else {
-        setActivity1(filteredActivites[0].name);
+        setActivity1(filteredActivites[0]);
         setActivity2('');
       }
     }
@@ -117,7 +120,7 @@ export default function ActivitiesPage( {route} ) {
       const data = await fetchWeather(lat, long, startDate, endDate, timeZone);
 
       if (time == 'Morning'){
-        sliced = data.slice(5, 12);
+        sliced = data.slice(6, 12);
       }
       else if (time == 'Afternoon'){
         sliced = data.slice(13, 18);
@@ -134,7 +137,7 @@ export default function ActivitiesPage( {route} ) {
         }
         setWeather(temper);
         if (temper){
-         getDropDown(temper); //set these as same variables ^ //TODO
+         getDropDown(temper); 
         }
       }
          

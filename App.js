@@ -40,7 +40,7 @@ export default function App() {
         <Tab.Screen name='Settings' component={ActivityPage} options={{ tabBarButton: () => null }} 
         />
         <Tab.Screen name='Profile' component={ProfilePage} />
-        <Tab.Screen name='Activity' component={ActivityPage} initialParams={{long: JSON.stringify(long).substring(0, 7), lat: JSON.stringify(lat).substring(0,7)}} //Coordinates hardcoded
+        <Tab.Screen name='Activity' component={ActivityPage} options={{ tabBarButton: () => null }} initialParams={{long: JSON.stringify(long).substring(0, 7), lat: JSON.stringify(lat).substring(0,7)}} //Coordinates hardcoded
         />
         <Tab.Screen name='Activities' component={ActivitiesPage}/>
        
