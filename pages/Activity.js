@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet, Button, TouchableOpacity} from 'react-native';
 import fetchWeather from "../api/weather";
 import activities from "../data/Activities";
 import { Activity } from '../data/ActivityClass';
@@ -36,7 +36,6 @@ export default function ActivitiesPage( {route} ) {
     endDate = new Date().toISOString().slice(0,10);
  }
 
-  
   const getDropDown = (weatherData) => {
     //what about null drop down from activity page // TODO
    let hours = [];
@@ -82,7 +81,6 @@ export default function ActivitiesPage( {route} ) {
     else {
       return `${10 + (sndDigit-2)}:00pm`;
     }
-    
   }
   
   useEffect(() => {
@@ -101,12 +99,12 @@ export default function ActivitiesPage( {route} ) {
       let y = Math.floor(Math.random() * (filteredActivites.length - midPoint - 1) + midPoint + 1); 
      
       if (filteredActivites.length > 1) { 
-      setActivity1(filteredActivites[x].name);
-      setActivity2(filteredActivites[y].name);
+      setActivity1(filteredActivites[x]);
+      setActivity2(filteredActivites[y]);
       }
 
       else if(filteredActivites.length == 1){
-        setActivity1(filteredActivites[0].name);
+        setActivity1(filteredActivites[0]);
         setActivity2('');
       }
       else {
@@ -156,20 +154,72 @@ export default function ActivitiesPage( {route} ) {
   }, [time]);
 
   return (
-    <View>      
-       <Text>{title}</Text>
-       <Text>{time}</Text>
+    <View style={styles.background}>    
+     <Text style={{ color: 'white', fontSize: 23}}>Activities!</Text>  
+       <Text style={{ color: 'white', fontSize: 20}}>{title}</Text>
+       <Text style={{ color: 'white', fontSize: 17}}>{time}</Text>
+      <Text style={{paddingTop: 100, color: 'black', fontSize: 15}} >{JSON.stringify(weather)}</Text>
 
-      <Text>{JSON.stringify(weather)}</Text>
-
-      <DropDownPicker items={hour} open={open} 
+      <View style = {styles.dropDown}>
+      <DropDownPicker style={styles.dropDown}  items={hour} open={open} 
       value={value} setOpen={setOpen} setValue={setValue} onChange={item => {setValue(item.value)}}
-        setItems={setHour} placeholder="Select time">
+        setItems={setHour} dropDownContainerStyle={styles.label} placeholder="Select time">
         Preferred Hour
       </DropDownPicker>
-
-      <Text>Suggestion 1:{JSON.stringify(activity1)}!</Text>
-      <Text>Suggestion 2:{JSON.stringify(activity2)}!</Text>
+     </View>
+     <View style={styles.row}>
+        <Text style={styles.text}>Suggestion 1: {JSON.stringify(activity1.name)}! Address: {JSON.stringify(activity1.addy)}</Text>
+        <Button title="Like" onPress={() => activity1.favActivity(activity1.name)} />
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.text}>Suggestion 2: {JSON.stringify(activity2.name)}!  Address: {JSON.stringify(activity2.addy)}</Text>
+        <Button title="Like" onPress={() => console.log(activity2.favActivity(activity2.name))} />
+      </View>
     </View>
   );
 }  
+
+const styles = StyleSheet.create({
+  background: {
+    paddingTop: 60,
+    alignItems: 'center', 
+    width: '100%',
+    height: '100%', 
+    backgroundColor: '#ABC270'
+  },
+
+  button: {     
+        paddingRight: 200,
+        alignItems: 'center',
+        justifyContent: 'center'
+  },
+
+  dropDown: {
+    width: 120,
+    backgroundColor: '#FFD996', // Changes the dropdown background color
+    borderColor: '#6D803C'  // Changes the border color
+  }, 
+
+  dropDownContainer: {
+    width: 40
+  }, 
+  
+  label: {
+    backgroundColor: '#FFD996', // Text color
+    //fontSize: 16, // Font size
+  },
+  row: {
+    flexDirection: 'row', // Aligns items horizontally
+    alignItems: 'center', // Vertically centers items in the row
+    marginBottom: 20, // Adds spacing between rows
+    flexWrap: 'wrap', // Ensures content wraps if it exceeds
+  },
+  text: {
+    paddingTop: 20,
+    color: 'white',
+    maxWidth: '70%',
+    fontSize: 20,
+    marginRight: 10, // Adds spacing between text and button
+  }
+
+});
