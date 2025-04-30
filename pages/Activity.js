@@ -92,8 +92,10 @@ export default function ActivitiesPage( {route} ) {
       else {
         currList = [];
       }
-     
-      currList.push(act.name);
+      
+      if(!currList.includes(act.name) && currList.length < 3){
+        currList.push(act.name);
+      }
       await AsyncStorage.setItem('FavActs', JSON.stringify(currList));
       
     } catch (error) {
@@ -101,12 +103,22 @@ export default function ActivitiesPage( {route} ) {
     }
   
 }
+/*
   
   useEffect(() => {
 
     if (weather != null){
-     // DESCRIPTION UNDEFINED MAYBE HAVE DEFAULT HER CHECK HERE FOR NULL DESCRIPTION!!!!
-      let filteredActivites = acts.filter(act => act.weather == (weather[value]).description && (act.time).includes(time) && (act.category) == title); 
+     //let filteredActivites = acts.filter(act => act.weather == (weather[value]).description && (act.time).includes(time) && (act.category) == title); 
+
+     let filteredActs = [];
+     for (let i=0; i < acts.length; i++){
+      if(weather[value].description !== undefined){
+        if ((acts[i].weather == (weather[value]).description) && (acts[i].time).includes(time) && acts[i].category == title){
+          filteredActs.push(acts[i]);
+       }
+      }
+    }
+    
       let midPoint = Math.floor((filteredActivites.length-1)/ 2);
       let x = Math.floor(Math.random() * (midPoint+1));
       let y = Math.floor(Math.random() * (filteredActivites.length - midPoint - 1) + midPoint + 1); 
@@ -127,7 +139,7 @@ export default function ActivitiesPage( {route} ) {
     }
    
   }, [value]);
-
+*/
 
 
   useEffect(() => { 
@@ -159,57 +171,89 @@ export default function ActivitiesPage( {route} ) {
       }
          
       
-    };
+    }
 
     getWeather();
+    let filteredActs = [];
+    if (weather != null){
+      for (let i=0; i < acts.length; i++){
+       if(weather && weather[value] && weather[value].description !== undefined){
+         if ((acts[i].weather == (weather[value]).description) && (acts[i].time).includes(time) && acts[i].category == title){
+           filteredActs.push(acts[i]);
+        }
+       }
+     }
+      
+       let midPoint = Math.floor((filteredActs.length-1)/ 2);
+       let x = Math.floor(Math.random() * (midPoint+1));
+       let y = Math.floor(Math.random() * (filteredActs.length - midPoint - 1) + midPoint + 1); 
+      
+       if (filteredActs.length > 1) { 
+         setActivity1(filteredActs[x]);
+         setActivity2(filteredActs[y]);
+       }
+ 
+       else if(filteredActs.length == 1){
+         setActivity1(filteredActs[0]);
+         setActivity2('');
+       }
+       else {
+         setActivity1('');
+         setActivity2('');
+       }
+     }
+    
 
-  }, [time]);
-// WHEN REFRESH DESCRIPTION IS UNDEFINED
+
+  }, [time, value]);
+
   return (
     <View style={styles.background}>    
-     <Text style={{ color: '#3A1F04', fontSize: 23}}> Activities! </Text>  
-       <Text style={{ color: '#3A1F04', fontSize: 20}}> {JSON.stringify(title)}</Text>
-       <Text style={{ color: '#3A1F04', fontSize: 17}}> {JSON.stringify(time)}</Text>
+     <Text style={{ color: '#805943', fontSize: 23,  marginTop: -25, fontWeight: 'bold' }}> Activities! </Text>  
+       <Text style={{ color: '#805943', fontSize: 20}}> Category: {(title)}</Text>
+       <Text style={{ color: '#805943', fontSize: 17, paddingBottom: 20}}> Time: {(time)}</Text>
        
 
   
-   <ScrollView horizontal={true} paddingBottom='10'>
+   <ScrollView horizontal={true} paddingTop='16'>
 
       {(weather !== null) ? 
         <View style={styles.grid_row}>
             {weather.map((obj, index) => (
               <View style={styles.grid_col} key={index}> 
     
-                  <Text style={{ color: 'white'}}> {obj.time || 'N/A'} </Text>
+                  <Text style={{ color: 'white', fontSize: 16}}> {obj.time || 'N/A'} </Text>
                   {obj.image} 
-                  <Text style={{ color: 'white'}}> {obj.description || 'N/A'} </Text>
-                  <Text style={{ color: '#white', fontSize: 13 , fontWeight: 'bold'}}> {obj.temp.split('.')[0] || 'N/A'} </Text>
+                  <Text style={{ color: 'white', fontSize: 16}}> {obj.description || 'N/A'} </Text>
+                  <Text style={{ color: 'white', fontSize: 23}}> {`${obj.temp.split('.')[0]} F` || 'N/A'} </Text>
                   </View>
                    ))}
            </View>
             : null }
       </ScrollView>
      
-      
-  
       <View style = {styles.dropDown}>
-      <DropDownPicker style={styles.dropDown}  items={hour} open={open} 
+      <DropDownPicker style={[styles.dropDown, {}]} items={hour} open={open} 
       value={value} setOpen={setOpen} setValue={setValue} onChange={item => {setValue(item.value)}}
-        setItems={setHour} dropDownContainerStyle={styles.label} placeholder="Select time">
+        setItems={setHour} dropDownContainerStyle={[styles.label, {flexDirection: 'row'}]} placeholder="Select time">
       </DropDownPicker>
      </View>
+     <View>
      <View style={styles.row}>
-        <Text style={styles.text}>
-          Suggestion 1: {activity1?.name ? JSON.stringify(activity1.name) : 'N/A'}! Address: {activity1?.addy ? JSON.stringify(activity1.addy): 'N/A'}
+        <Text style={[styles.row, styles.text, {color:'#805943'}]}>
+          Suggestion 1: {activity1?.name ? (activity1.name) : 'N/A'}!{"\n"}
+          Address: {activity1?.addy ? (activity1.addy): 'N/A'}
           </Text>
         <Button title="Like" onPress={() => storeActivities(activity1)} />
       </View>
       <View style={styles.row}>
-      <Text style={styles.text}>
-          Suggestion 2: {activity2?.name ? JSON.stringify(activity2.name) : 'N/A'}! Address: {activity2?.addy ? JSON.stringify(activity2.addy): 'N/A'}
+      <Text style={[styles.row, styles.text, {color:'#805943'}]}>
+          Suggestion 2: {activity2?.name ? (activity2.name) : 'N/A'}!{"\n"}
+           Address: {activity2?.addy ? (activity2.addy): 'N/A'}
           </Text>
         <Button title="Like" onPress={() => storeActivities(activity2)} />
       </View>
+    </View>
     </View>
   );
 }  
@@ -230,7 +274,7 @@ const styles = StyleSheet.create({
   },
 
   dropDown: {
-    width: 120,
+    width: 300,
     backgroundColor: '#FFD996', 
     borderColor: '#6D803C'  
   }, 
@@ -242,11 +286,11 @@ const styles = StyleSheet.create({
   label: {
     backgroundColor: '#FFD996',
   },
-  row: {
+  row: { 
     flexDirection: 'row',
     alignItems: 'center', 
-    marginBottom: 20, 
-    flexWrap: 'wrap',
+    marginBottom: 10, 
+    flexWrap: 'nowrap',
     justifyContent: 'space-center'
   },
   col: {
@@ -263,7 +307,7 @@ const styles = StyleSheet.create({
   grid_col: {
     flexDirection: 'column', 
     alignItems: 'center',
-    marginRight: 13, 
+    marginRight: 15, 
   
   }, 
   text: {

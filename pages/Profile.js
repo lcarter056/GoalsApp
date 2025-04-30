@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import { View, Text, Button, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
@@ -53,7 +53,7 @@ const removeActs = async (act) => {
       <Text> Fav Activites </Text> 
         {favs.map((act, index) => (
            <View style={styles.row} key={index}>
-              <Text style={styles.text}> {JSON.stringify(act)} </Text>
+              <Text style={styles.text}> {(act)} </Text>
               <Button title="Unlike" onPress={() => removeActs(act)} />
             </View>
             ))}
