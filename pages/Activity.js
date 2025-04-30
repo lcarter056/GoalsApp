@@ -65,7 +65,7 @@ export default function ActivitiesPage( {route} ) {
       return "Thunderstorm";
     }
     else {
-      return JSON.stringify(code);
+      return JSON.stringify(code); 
     }
   }
   
@@ -167,40 +167,47 @@ export default function ActivitiesPage( {route} ) {
 // WHEN REFRESH DESCRIPTION IS UNDEFINED
   return (
     <View style={styles.background}>    
-     <Text style={{ color: 'white', fontSize: 23}}>Activities!</Text>  
-       <Text style={{ color: 'white', fontSize: 20}}>{title}</Text>
-       <Text style={{ color: 'white', fontSize: 17}}>{time}</Text>
+     <Text style={{ color: '#3A1F04', fontSize: 23}}> Activities! </Text>  
+       <Text style={{ color: '#3A1F04', fontSize: 20}}> {JSON.stringify(title)}</Text>
+       <Text style={{ color: '#3A1F04', fontSize: 17}}> {JSON.stringify(time)}</Text>
        
-    
-    <ScrollView horizontal={true} paddingBottom='10'>
+
+  
+   <ScrollView horizontal={true} paddingBottom='10'>
+
       {(weather !== null) ? 
         <View style={styles.grid_row}>
             {weather.map((obj, index) => (
               <View style={styles.grid_col} key={index}> 
-                  {obj.image}
-                  <Text> {obj.time} </Text>
-                  <Text> {obj.description} </Text>
-                  <Text> {obj.temp} </Text>
+    
+                  <Text style={{ color: 'white'}}> {obj.time || 'N/A'} </Text>
+                  {obj.image} 
+                  <Text style={{ color: 'white'}}> {obj.description || 'N/A'} </Text>
+                  <Text style={{ color: '#white', fontSize: 13 , fontWeight: 'bold'}}> {obj.temp.split('.')[0] || 'N/A'} </Text>
                   </View>
-                   ))};
+                   ))}
            </View>
-            : ''}
-      
+            : null }
       </ScrollView>
+     
       
+  
       <View style = {styles.dropDown}>
       <DropDownPicker style={styles.dropDown}  items={hour} open={open} 
       value={value} setOpen={setOpen} setValue={setValue} onChange={item => {setValue(item.value)}}
         setItems={setHour} dropDownContainerStyle={styles.label} placeholder="Select time">
-        Preferred Hour
       </DropDownPicker>
      </View>
      <View style={styles.row}>
-        <Text style={styles.text}>Suggestion 1: {JSON.stringify(activity1.name)}! Address: {JSON.stringify(activity1.addy)}</Text>
+        <Text style={styles.text}>
+          Suggestion 1: {activity1?.name ? JSON.stringify(activity1.name) : 'N/A'}! Address: {activity1?.addy ? JSON.stringify(activity1.addy): 'N/A'}
+          </Text>
         <Button title="Like" onPress={() => storeActivities(activity1)} />
       </View>
       <View style={styles.row}>
-        <Text style={styles.text}>Suggestion 2: {JSON.stringify(activity2.name)}!  Address: {JSON.stringify(activity2.addy)}</Text>
+      <Text style={styles.text}>
+          Suggestion 2: {activity2?.name ? JSON.stringify(activity2.name) : 'N/A'}! Address: {activity2?.addy ? JSON.stringify(activity2.addy): 'N/A'}
+          </Text>
         <Button title="Like" onPress={() => storeActivities(activity2)} />
       </View>
     </View>

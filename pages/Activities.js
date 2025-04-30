@@ -36,19 +36,19 @@ export default function ActivitiesPage() {
       </View>
       <TouchableOpacity style= {styles.button}
          onPress={() => loadPage('Exercise')}> 
-        <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }} >Exercise</Text>
+        <Text style={{ color: 'white', fontSize: 18 }} >Exercise</Text>
       </TouchableOpacity>
       <TouchableOpacity style= {styles.button}
        onPress={() => loadPage('Restaurant')}>
-        <Text style={{ color: 'white', fontSize: 16 }}>Restaurant</Text>
+        <Text style={{ color: 'white', fontSize: 18 }}>Restaurant</Text>
       </TouchableOpacity>
       <TouchableOpacity style= {styles.button}
        onPress={() => loadPage('Hang Out')}>  
-       <Text style={{ color: 'white', fontSize: 16 }}>Hang out</Text>
+       <Text style={{ color: 'white', fontSize: 18 }}>Hang out</Text>
       </TouchableOpacity>
       <TouchableOpacity style= {styles.button}
       onPress={() => loadPage('Study Spot')}>
-        <Text style={{ color: 'white', fontSize: 16 }}>Study Spot</Text>
+        <Text style={{ color: 'white', fontSize: 18 }}>Study Spot</Text>
       </TouchableOpacity>
     </View>
 
