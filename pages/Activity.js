@@ -93,7 +93,7 @@ export default function ActivitiesPage( {route} ) {
         currList = [];
       }
       
-      if(!currList.includes(act.name) && currList.length < 3){
+      if(!currList.includes(act.name) && currList.length < 5){
         currList.push(act.name);
       }
       await AsyncStorage.setItem('FavActs', JSON.stringify(currList));
