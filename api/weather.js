@@ -1,6 +1,6 @@
 
 async function fetchWeather(lat, long, startDate, endDate, timeZone) {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code,wind_speed_10m&wind_speed_unit=mph&temperature_unit=fahrenheit&start_date=${startDate}&end_date=${endDate}&timezone=${timeZone} `;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code,wind_speed_10m&wind_speed_unit=mph&temperature_unit=fahrenheit&start_date=${startDate}&end_date=${endDate}&timezone=${timeZone}`;
 
     return await fetch(url)
     .then(response => {

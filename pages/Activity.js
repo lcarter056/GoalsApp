@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from "react";
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
 import fetchWeather from "../api/weather";
 import activities from "../data/Activities";
 import { Activity } from '../data/ActivityClass';
 import DropDownPicker from 'react-native-dropdown-picker';
-
-
+import { getImage } from '../data/WeatherClass';
+import  AsyncStorage  from '@react-native-async-storage/async-storage';
 
 export default function ActivitiesPage( {route} ) {
   const [weather, setWeather] = useState(null);
@@ -15,8 +15,8 @@ export default function ActivitiesPage( {route} ) {
    const [open, setOpen] = useState(false);
    const [value, setValue] = useState(null);
    const [hour, setHour] = useState([]);
-    
 
+    
   const { title, time, lat, long } = route.params;
   let acts = [];
   var startDate = "";
@@ -36,9 +36,8 @@ export default function ActivitiesPage( {route} ) {
     endDate = new Date().toISOString().slice(0,10);
  }
 
-  
   const getDropDown = (weatherData) => {
-    //what about null drop down from activity page // TODO
+   //what about null drop down from activity page // TODO
    let hours = [];
     for(let i=0; i< weatherData.length; i++){
       hours.push({label : weatherData[i].time, value: i}); 
@@ -66,7 +65,7 @@ export default function ActivitiesPage( {route} ) {
       return "Thunderstorm";
     }
     else {
-      return JSON.stringify(code);
+      return JSON.stringify(code); 
     }
   }
   
@@ -82,31 +81,55 @@ export default function ActivitiesPage( {route} ) {
     else {
       return `${10 + (sndDigit-2)}:00pm`;
     }
-    
   }
+
+  const storeActivities = async (act) => {
+    try {
+      let currList = await AsyncStorage.getItem('FavActs');
+      if (currList != null){
+       currList =  JSON.parse(currList);
+      }
+      else {
+        currList = [];
+      }
+      
+      if(!currList.includes(act.name) && currList.length < 5){
+        currList.push(act.name);
+      }
+      await AsyncStorage.setItem('FavActs', JSON.stringify(currList));
+      
+    } catch (error) {
+      console.error('Error adding activity to the list');
+    }
+  
+}
+/*
   
   useEffect(() => {
 
     if (weather != null){
-      /*
-      let timetag = time;
-      if(timetag == null){
-        timetag = "Evening";
+     //let filteredActivites = acts.filter(act => act.weather == (weather[value]).description && (act.time).includes(time) && (act.category) == title); 
+
+     let filteredActs = [];
+     for (let i=0; i < acts.length; i++){
+      if(weather[value].description !== undefined){
+        if ((acts[i].weather == (weather[value]).description) && (acts[i].time).includes(time) && acts[i].category == title){
+          filteredActs.push(acts[i]);
+       }
       }
-        */
-     
-   let filteredActivites = acts.filter(act => act.weather == (weather[value]).description && (act.time).includes(time) && (act.category) == title); 
+    }
+    
       let midPoint = Math.floor((filteredActivites.length-1)/ 2);
       let x = Math.floor(Math.random() * (midPoint+1));
       let y = Math.floor(Math.random() * (filteredActivites.length - midPoint - 1) + midPoint + 1); 
      
       if (filteredActivites.length > 1) { 
-      setActivity1(filteredActivites[x].name);
-      setActivity2(filteredActivites[y].name);
+        setActivity1(filteredActivites[x]);
+        setActivity2(filteredActivites[y]);
       }
 
       else if(filteredActivites.length == 1){
-        setActivity1(filteredActivites[0].name);
+        setActivity1(filteredActivites[0]);
         setActivity2('');
       }
       else {
@@ -116,9 +139,7 @@ export default function ActivitiesPage( {route} ) {
     }
    
   }, [value]);
-
-
-
+*/
 
 
   useEffect(() => { 
@@ -133,43 +154,168 @@ export default function ActivitiesPage( {route} ) {
         sliced = data.slice(13, 18);
       }
       else {
-        sliced = data.slice(19, 22);
+        sliced = data.slice(18, 22);
       }
       
       if (sliced != null){
         var temper = []
         for (let i=0; i < sliced.length; i++){
+         let image = getImage(getCode(sliced[i].code, sliced[i].wind), time);
          temper.push({'time': `${convertTime(sliced[i].time)}`, 'temp' : `${sliced[i].temp} F`, 
-         'description' : `${getCode(sliced[i].code, sliced[i].wind)}`});
+         'description' : `${getCode(sliced[i].code, sliced[i].wind)}`, 'image': image});
         }
         setWeather(temper);
         if (temper){
-         getDropDown(temper); 
+        getDropDown(temper); 
         }
       }
          
       
-    };
+    }
 
     getWeather();
+    let filteredActs = [];
+    if (weather != null){
+      for (let i=0; i < acts.length; i++){
+       if(weather && weather[value] && weather[value].description !== undefined){
+         if ((acts[i].weather == (weather[value]).description) && (acts[i].time).includes(time) && acts[i].category == title){
+           filteredActs.push(acts[i]);
+        }
+       }
+     }
+      
+       let midPoint = Math.floor((filteredActs.length-1)/ 2);
+       let x = Math.floor(Math.random() * (midPoint+1));
+       let y = Math.floor(Math.random() * (filteredActs.length - midPoint - 1) + midPoint + 1); 
+      
+       if (filteredActs.length > 1) { 
+         setActivity1(filteredActs[x]);
+         setActivity2(filteredActs[y]);
+       }
+ 
+       else if(filteredActs.length == 1){
+         setActivity1(filteredActs[0]);
+         setActivity2('');
+       }
+       else {
+         setActivity1('');
+         setActivity2('');
+       }
+     }
+    
 
-  }, [time]);
+
+  }, [time, value]);
 
   return (
-    <View>      
-       <Text>{title}</Text>
-       <Text>{time}</Text>
+    <View style={styles.background}>    
+     <Text style={{ color: '#805943', fontSize: 23,  marginTop: -25, fontWeight: 'bold' }}> Activities! </Text>  
+       <Text style={{ color: '#805943', fontSize: 20}}> Category: {(title)}</Text>
+       <Text style={{ color: '#805943', fontSize: 17, paddingBottom: 20}}> Time: {(time)}</Text>
+       
 
-      <Text>{JSON.stringify(weather)}</Text>
+  
+   <ScrollView horizontal={true} paddingTop='16'>
 
-      <DropDownPicker items={hour} open={open} 
+      {(weather !== null) ? 
+        <View style={styles.grid_row}>
+            {weather.map((obj, index) => (
+              <View style={styles.grid_col} key={index}> 
+    
+                  <Text style={{ color: 'white', fontSize: 16}}> {obj.time || 'N/A'} </Text>
+                  {obj.image} 
+                  <Text style={{ color: 'white', fontSize: 16}}> {obj.description || 'N/A'} </Text>
+                  <Text style={{ color: 'white', fontSize: 23}}> {`${obj.temp.split('.')[0]} F` || 'N/A'} </Text>
+                  </View>
+                   ))}
+           </View>
+            : null }
+      </ScrollView>
+     
+      <View style = {styles.dropDown}>
+      <DropDownPicker style={[styles.dropDown, {}]} items={hour} open={open} 
       value={value} setOpen={setOpen} setValue={setValue} onChange={item => {setValue(item.value)}}
-        setItems={setHour} placeholder="Select time">
-        Preferred Hour
+        setItems={setHour} dropDownContainerStyle={[styles.label, {flexDirection: 'row'}]} placeholder="Select time">
       </DropDownPicker>
-
-      <Text>Suggestion 1:{JSON.stringify(activity1)}!</Text>
-      <Text>Suggestion 2:{JSON.stringify(activity2)}!</Text>
+     </View>
+     <View>
+     <View style={styles.row}>
+        <Text style={[styles.row, styles.text, {color:'#805943'}]}>
+          Suggestion 1: {activity1?.name ? (activity1.name) : 'N/A'}!{"\n"}
+          Address: {activity1?.addy ? (activity1.addy): 'N/A'}
+          </Text>
+        <Button title="Like" onPress={() => storeActivities(activity1)} />
+      </View>
+      <View style={styles.row}>
+      <Text style={[styles.row, styles.text, {color:'#805943'}]}>
+          Suggestion 2: {activity2?.name ? (activity2.name) : 'N/A'}!{"\n"}
+           Address: {activity2?.addy ? (activity2.addy): 'N/A'}
+          </Text>
+        <Button title="Like" onPress={() => storeActivities(activity2)} />
+      </View>
+    </View>
     </View>
   );
 }  
+
+const styles = StyleSheet.create({
+  background: {
+    paddingTop: 60,
+    alignItems: 'center', 
+    width: '100%',
+    height: '100%', 
+    backgroundColor: '#ABC270'
+  },
+
+  button: {     
+        paddingRight: 200,
+        alignItems: 'center',
+        justifyContent: 'center'
+  },
+
+  dropDown: {
+    width: 300,
+    backgroundColor: '#FFD996', 
+    borderColor: '#6D803C'  
+  }, 
+
+  dropDownContainer: {
+    width: 40
+  }, 
+  
+  label: {
+    backgroundColor: '#FFD996',
+  },
+  row: { 
+    flexDirection: 'row',
+    alignItems: 'center', 
+    marginBottom: 10, 
+    flexWrap: 'nowrap',
+    justifyContent: 'space-center'
+  },
+  col: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    marginRight: 13, 
+    flexWrap: 'nowrap', 
+  }, 
+  grid_row: {
+    flexDirection: 'row', 
+    flexWrap: 'wrap', 
+    justifyContent: 'space-around'
+  },
+  grid_col: {
+    flexDirection: 'column', 
+    alignItems: 'center',
+    marginRight: 15, 
+  
+  }, 
+  text: {
+    paddingTop: 20,
+    color: 'white',
+    maxWidth: '70%',
+    fontSize: 20,
+    marginRight: 10, 
+  }
+
+});
