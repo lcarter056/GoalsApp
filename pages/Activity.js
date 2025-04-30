@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from "react";
-import { View, Text, StyleSheet, Button, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
 import fetchWeather from "../api/weather";
 import activities from "../data/Activities";
 import { Activity } from '../data/ActivityClass';
 import DropDownPicker from 'react-native-dropdown-picker';
-
-
+import { getImage } from '../data/WeatherClass';
+import  AsyncStorage  from '@react-native-async-storage/async-storage';
 
 export default function ActivitiesPage( {route} ) {
   const [weather, setWeather] = useState(null);
@@ -15,8 +15,8 @@ export default function ActivitiesPage( {route} ) {
    const [open, setOpen] = useState(false);
    const [value, setValue] = useState(null);
    const [hour, setHour] = useState([]);
-    
 
+    
   const { title, time, lat, long } = route.params;
   let acts = [];
   var startDate = "";
@@ -37,7 +37,7 @@ export default function ActivitiesPage( {route} ) {
  }
 
   const getDropDown = (weatherData) => {
-    //what about null drop down from activity page // TODO
+   //what about null drop down from activity page // TODO
    let hours = [];
     for(let i=0; i< weatherData.length; i++){
       hours.push({label : weatherData[i].time, value: i}); 
@@ -82,25 +82,38 @@ export default function ActivitiesPage( {route} ) {
       return `${10 + (sndDigit-2)}:00pm`;
     }
   }
+
+  const storeActivities = async (act) => {
+    try {
+      let currList = await AsyncStorage.getItem('FavActs');
+      if (currList != null){
+       currList =  JSON.parse(currList);
+      }
+      else {
+        currList = [];
+      }
+     
+      currList.push(act.name);
+      await AsyncStorage.setItem('FavActs', JSON.stringify(currList));
+      
+    } catch (error) {
+      console.error('Error adding activity to the list');
+    }
+  
+}
   
   useEffect(() => {
 
     if (weather != null){
-      /*
-      let timetag = time;
-      if(timetag == null){
-        timetag = "Evening";
-      }
-        */
-     
-   let filteredActivites = acts.filter(act => act.weather == (weather[value]).description && (act.time).includes(time) && (act.category) == title); 
+     // DESCRIPTION UNDEFINED MAYBE HAVE DEFAULT HER CHECK HERE FOR NULL DESCRIPTION!!!!
+      let filteredActivites = acts.filter(act => act.weather == (weather[value]).description && (act.time).includes(time) && (act.category) == title); 
       let midPoint = Math.floor((filteredActivites.length-1)/ 2);
       let x = Math.floor(Math.random() * (midPoint+1));
       let y = Math.floor(Math.random() * (filteredActivites.length - midPoint - 1) + midPoint + 1); 
      
       if (filteredActivites.length > 1) { 
-      setActivity1(filteredActivites[x]);
-      setActivity2(filteredActivites[y]);
+        setActivity1(filteredActivites[x]);
+        setActivity2(filteredActivites[y]);
       }
 
       else if(filteredActivites.length == 1){
@@ -117,8 +130,6 @@ export default function ActivitiesPage( {route} ) {
 
 
 
-
-
   useEffect(() => { 
     const getWeather = async () => {
       getDate();
@@ -131,18 +142,19 @@ export default function ActivitiesPage( {route} ) {
         sliced = data.slice(13, 18);
       }
       else {
-        sliced = data.slice(19, 22);
+        sliced = data.slice(18, 22);
       }
       
       if (sliced != null){
         var temper = []
         for (let i=0; i < sliced.length; i++){
+         let image = getImage(getCode(sliced[i].code, sliced[i].wind), time);
          temper.push({'time': `${convertTime(sliced[i].time)}`, 'temp' : `${sliced[i].temp} F`, 
-         'description' : `${getCode(sliced[i].code, sliced[i].wind)}`});
+         'description' : `${getCode(sliced[i].code, sliced[i].wind)}`, 'image': image});
         }
         setWeather(temper);
         if (temper){
-         getDropDown(temper); 
+        getDropDown(temper); 
         }
       }
          
@@ -152,14 +164,30 @@ export default function ActivitiesPage( {route} ) {
     getWeather();
 
   }, [time]);
-
+// WHEN REFRESH DESCRIPTION IS UNDEFINED
   return (
     <View style={styles.background}>    
      <Text style={{ color: 'white', fontSize: 23}}>Activities!</Text>  
        <Text style={{ color: 'white', fontSize: 20}}>{title}</Text>
        <Text style={{ color: 'white', fontSize: 17}}>{time}</Text>
-      <Text style={{paddingTop: 100, color: 'black', fontSize: 15}} >{JSON.stringify(weather)}</Text>
-
+       
+    
+    <ScrollView horizontal={true} paddingBottom='10'>
+      {(weather !== null) ? 
+        <View style={styles.grid_row}>
+            {weather.map((obj, index) => (
+              <View style={styles.grid_col} key={index}> 
+                  {obj.image}
+                  <Text> {obj.time} </Text>
+                  <Text> {obj.description} </Text>
+                  <Text> {obj.temp} </Text>
+                  </View>
+                   ))};
+           </View>
+            : ''}
+      
+      </ScrollView>
+      
       <View style = {styles.dropDown}>
       <DropDownPicker style={styles.dropDown}  items={hour} open={open} 
       value={value} setOpen={setOpen} setValue={setValue} onChange={item => {setValue(item.value)}}
@@ -169,11 +197,11 @@ export default function ActivitiesPage( {route} ) {
      </View>
      <View style={styles.row}>
         <Text style={styles.text}>Suggestion 1: {JSON.stringify(activity1.name)}! Address: {JSON.stringify(activity1.addy)}</Text>
-        <Button title="Like" onPress={() => activity1.favActivity(activity1.name)} />
+        <Button title="Like" onPress={() => storeActivities(activity1)} />
       </View>
       <View style={styles.row}>
         <Text style={styles.text}>Suggestion 2: {JSON.stringify(activity2.name)}!  Address: {JSON.stringify(activity2.addy)}</Text>
-        <Button title="Like" onPress={() => console.log(activity2.favActivity(activity2.name))} />
+        <Button title="Like" onPress={() => storeActivities(activity2)} />
       </View>
     </View>
   );
@@ -196,8 +224,8 @@ const styles = StyleSheet.create({
 
   dropDown: {
     width: 120,
-    backgroundColor: '#FFD996', // Changes the dropdown background color
-    borderColor: '#6D803C'  // Changes the border color
+    backgroundColor: '#FFD996', 
+    borderColor: '#6D803C'  
   }, 
 
   dropDownContainer: {
@@ -205,21 +233,38 @@ const styles = StyleSheet.create({
   }, 
   
   label: {
-    backgroundColor: '#FFD996', // Text color
-    //fontSize: 16, // Font size
+    backgroundColor: '#FFD996',
   },
   row: {
-    flexDirection: 'row', // Aligns items horizontally
-    alignItems: 'center', // Vertically centers items in the row
-    marginBottom: 20, // Adds spacing between rows
-    flexWrap: 'wrap', // Ensures content wraps if it exceeds
+    flexDirection: 'row',
+    alignItems: 'center', 
+    marginBottom: 20, 
+    flexWrap: 'wrap',
+    justifyContent: 'space-center'
   },
+  col: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    marginRight: 13, 
+    flexWrap: 'nowrap', 
+  }, 
+  grid_row: {
+    flexDirection: 'row', 
+    flexWrap: 'wrap', 
+    justifyContent: 'space-around'
+  },
+  grid_col: {
+    flexDirection: 'column', 
+    alignItems: 'center',
+    marginRight: 13, 
+  
+  }, 
   text: {
     paddingTop: 20,
     color: 'white',
     maxWidth: '70%',
     fontSize: 20,
-    marginRight: 10, // Adds spacing between text and button
+    marginRight: 10, 
   }
 
 });

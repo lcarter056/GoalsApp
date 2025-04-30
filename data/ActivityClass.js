@@ -1,6 +1,4 @@
 
-
-let favActivities = [];
 class Activity {
     constructor(name, category, weather, time, distance, addy){
         this.name = name;
@@ -9,10 +7,6 @@ class Activity {
         this.time = time;
         this.distance = distance;
         this.addy = addy;
-    }
-
-    favActivity(activity){
-    favActivities.push(activity);
     }
 
 }

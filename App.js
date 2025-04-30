@@ -7,6 +7,7 @@ import ActivitiesPage from './pages/Activities';
 import GoalsPage from './pages/Goals';
 import ActivityPage from './pages/Activity';
 import * as Location from 'expo-location';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,7 +17,24 @@ export default function App() {
   const [lat, setLat] = useState(null);
   const [long, setLong] = useState(null);
 
+  const setFavs = async () => {
+    try {
+      const favs = await AsyncStorage.getItem('FavActs');
+      if(!favs){
+        await AsyncStorage.setItem('FavActs', JSON.stringify([]));
+      }
+  
+    }
+    catch (error) {
+    console.log('Error setting fav activites');
+    }
+    
+  }
+
+
+
     useEffect(() => {
+      
        async function getCurrentLocation() {
          
          let { status } = await Location.requestForegroundPermissionsAsync();
@@ -31,6 +49,7 @@ export default function App() {
        }
    
        getCurrentLocation();
+       setFavs();
      }, []);
      
   return (

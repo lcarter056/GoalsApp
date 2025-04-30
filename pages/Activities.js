@@ -26,17 +26,17 @@ export default function ActivitiesPage() {
 
   return (
     <View style={styles.background}>
-  <Text style={{ color: 'white', fontSize: 23, paddingBottom: 50 }}>Choose an activity sub-category!</Text>
+  <Text style={{ color: '#805943', fontWeight: 'bold', fontSize: 23, paddingBottom: 30, marginTop: -30 }}>Choose an activity category!</Text>
     <View style = {styles.dropDown}>
       <DropDownPicker style={styles.dropDown} items={time} open={open} 
       value={value} setOpen={setOpen} setValue={setValue} onChange={item => {setValue(item.value)}}
-        setItems={setTime} dropDownContainerStyle={styles.label} placeholder="Select time"
+        setItems={setTime} dropDownContainerStyle={styles.label} labelStyle={{color: '#805943', fontWeight: 'bold'}} textStyle={{color: '#805943'}} placeholder="Select time"
       >
       </DropDownPicker>
       </View>
       <TouchableOpacity style= {styles.button}
          onPress={() => loadPage('Exercise')}> 
-        <Text style={{ color: 'white', fontSize: 16 }} >Exercise</Text>
+        <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }} >Exercise</Text>
       </TouchableOpacity>
       <TouchableOpacity style= {styles.button}
        onPress={() => loadPage('Restaurant')}>
@@ -58,9 +58,9 @@ export default function ActivitiesPage() {
 
 const styles = StyleSheet.create({
   background: {
-    flex: 1, // Ensures the parent takes up the full screen
-    justifyContent: 'center', // Centers children vertically
-    alignItems: 'center', // Centers children horizontally
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center', 
     width: '100%',
     height: '100%', 
     backgroundColor: '#ABC270'
@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
 
   dropDown: {
     width: 140,
-    backgroundColor: '#FFD996', // Changes the dropdown background color
-    borderColor: '#6D803C', // Changes the border color
+    backgroundColor: '#FFD996', 
+    borderColor: '#6D803C', 
   }, 
 
   dropDownContainer: {
@@ -86,8 +86,7 @@ const styles = StyleSheet.create({
   }, 
   
   label: {
-    backgroundColor: '#FFD996', // Text color
-    //fontSize: 16, // Font size
+    backgroundColor: '#FFD996', 
   }
 
 });

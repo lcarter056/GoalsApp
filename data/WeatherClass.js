@@ -2,36 +2,65 @@
 
 import { Image } from 'react-native';
 
-class Weather {
-    constructor(weatherTag, weatherCode){
-        this.tag = weatherTag;
-        this.code = weatherCode;
-    }
-
-    getCode(){
-        if (this.weatherTag == 'Clear Skies'){
+  function getImage(weatherTag, time){
+ 
+   if(weatherTag == 'Thunderstorm'){
+    return (
+        <Image style={{ width: 75, height: 75}} source = {require('./clearDay.png')}
+        />
+       )
+   }
+   else if (weatherTag == 'Snow') {
+    return (
+        <Image style={{ width: 75, height: 75}} source = {require('./clearDay.png')}
+        />
+       )
+   }
+   
+  else if (time == 'Morning' || time == 'Afternoon'){
+        if (weatherTag == 'Clear Skies'){
            return (
-            <Image source = {require('./path')}
+            <Image style={{ width: 75, height: 75}} source = {require('./clearDay.png')}
             />
            )
         }
-        else if (this.weatherTag == 'Rainy'){
+        else if (weatherTag == 'Rainy'){
             return (
-                <Image source = {require('./path')}
+                <Image source = {require('./rainDay.png')}
                 />
                )
         }
-        else if (this.weatherTag == 'Windy'){
+        else {
             return (
-                <Image source = {require('./path')}
+                <Image source = {require('./windDay.png')}
                 />
                )
-
-        } else {
-            //still have weather tags to contribute
-        }
+         } 
     }
 
-}
+       else {
+        if (weatherTag == 'Clear Skies'){
+            return (
+             <Image style={{ width: 75, height: 75}} source = {require('./clearNight.png')}
+             />
+            )
+         }
+         else if (weatherTag == 'Rainy'){
+             return (
+                 <Image source = {require('./nightRain.png')}
+                 />
+                )
+         }
+         else {
+             return (
+                 <Image source = {require('./windNight.png')}
+                 />
+                )
+          } 
+       }
 
-export { Weather };
+     }
+ 
+
+
+export { getImage };
