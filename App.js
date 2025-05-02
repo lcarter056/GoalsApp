@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
+import * as ScreenOrientation from 'expo-screen-orientation';
 import ProfilePage from './pages/Profile';
 import ActivitiesPage from './pages/Activities';
 import GoalsPage from './pages/Goals';
@@ -83,7 +84,7 @@ function MainTabs({setIsLoggedIn}) {
     useEffect(() => {
       
        async function getCurrentLocation() {
-         
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
          let { status } = await Location.requestForegroundPermissionsAsync();
          if (status !== 'granted') {
            setErrorMsg('Permission to access location was denied');
