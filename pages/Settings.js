@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 
-export default function SettingsPage({ route }) {
+export default function SettingsPage({ route, setIsLoggedIn }) {
   const { username, password } = route.params;
-
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Username:</Text>
@@ -11,6 +13,10 @@ export default function SettingsPage({ route }) {
 
       <Text style={styles.label}>Password:</Text>
       <Text style={styles.value}>{password}</Text>
+
+      <View style={styles.logoutButton}>
+        <Button title='Logout' onPress={handleLogout} color="#d9534f"/>
+      </View>
     </View>
   );
 }
@@ -30,6 +36,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 8,
     color: 'gray',
+  },
+  logoutButton: {
+    marginTop: 40,
   },
 });
 

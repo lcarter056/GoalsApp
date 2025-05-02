@@ -44,19 +44,21 @@ export default function ProfilePage() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.avatarContainer}>
-        <Image
-          source={{ uri: "https://www.w3schools.com/howto/img_avatar.png" }}
-          style={styles.avatar}
-        />
-        <View style={styles.infoRow}>
-          <Text style={styles.name}>Username</Text>
-          <View style={styles.streakContainer}>
-            <Text style={styles.streak}>🔥</Text>
-            <Text style={styles.streakText}>3</Text>
+        <View style={styles.avatarContainer}>
+           <Image
+              source={{ uri: 'https://cdn-icons-png.flaticon.com/512/290/290022.png' }}
+              style={styles.avatar}
+            />
+           <View style={styles.infoRow}>
+              <Text style={styles.name}>goalSetter</Text>
+              <View style={styles.streakContainer}> 
+                <Text style={styles.streak}>🔥</Text>
+                <Text style={styles.streakText}>3</Text>
+              </View>
+            </View>
           </View>
         </View>
-      </View>
+  
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Favorite Activities:</Text>
