@@ -209,9 +209,8 @@ export default function ActivitiesPage( {route} ) {
 
   return (
     <View style={styles.background}>    
-     <Text style={{ color: '#805943', fontSize: 23,  marginTop: -25, fontWeight: 'bold' }}> Activities! </Text>  
-       <Text style={{ color: '#805943', fontSize: 20}}> Category: {(title)}</Text>
-       <Text style={{ color: '#805943', fontSize: 17, paddingBottom: 20}}> Time: {(time)}</Text>
+       <Text style={{ color: '#5C4033', fontSize: 20, fontWeight:'bold'}}> Category: {(title)}</Text>
+       <Text style={{ color: '#5C4033', fontSize: 17, paddingBottom: 20}}> Time: {(time)}</Text>
        
 
   
@@ -240,18 +239,18 @@ export default function ActivitiesPage( {route} ) {
      </View>
      <View>
      <View style={styles.row}>
-        <Text style={[styles.row, styles.text, {color:'#805943'}]}>
+        <Text style={[styles.row, styles.text, {color:'#5C4033'}]}>
           Suggestion 1: {activity1?.name ? (activity1.name) : 'N/A'}!{"\n"}
           Address: {activity1?.addy ? (activity1.addy): 'N/A'}
           </Text>
-        <Button title="Like" onPress={() => storeActivities(activity1)} />
+        <Button title="Like" onPress={() => storeActivities(activity1)} color="#5C4033" />
       </View>
       <View style={styles.row}>
-      <Text style={[styles.row, styles.text, {color:'#805943'}]}>
+      <Text style={[styles.row, styles.text, {color:'#5C4033'}]}>
           Suggestion 2: {activity2?.name ? (activity2.name) : 'N/A'}!{"\n"}
            Address: {activity2?.addy ? (activity2.addy): 'N/A'}
           </Text>
-        <Button title="Like" onPress={() => storeActivities(activity2)} />
+        <Button title="Like" onPress={() => storeActivities(activity2)} color="#5C4033"/>
       </View>
     </View>
     </View>
@@ -260,7 +259,7 @@ export default function ActivitiesPage( {route} ) {
 
 const styles = StyleSheet.create({
   background: {
-    paddingTop: 60,
+    paddingTop: 30,
     alignItems: 'center', 
     width: '100%',
     height: '100%', 
@@ -311,7 +310,7 @@ const styles = StyleSheet.create({
   
   }, 
   text: {
-    paddingTop: 20,
+    paddingTop: 25,
     color: 'white',
     maxWidth: '70%',
     fontSize: 20,

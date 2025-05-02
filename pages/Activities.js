@@ -26,11 +26,11 @@ export default function ActivitiesPage() {
 
   return (
     <View style={styles.background}>
-  <Text style={{ color: '#805943', fontWeight: 'bold', fontSize: 23, paddingBottom: 30, marginTop: -30 }}>Choose an activity category!</Text>
+  <Text style={{ color: '#5C4033', fontWeight: 'bold', fontSize: 23, paddingBottom: 30, marginTop: -30 }}>Choose an Activity Category!</Text>
     <View style = {styles.dropDown}>
       <DropDownPicker style={styles.dropDown} items={time} open={open} 
       value={value} setOpen={setOpen} setValue={setValue} onChange={item => {setValue(item.value)}}
-        setItems={setTime} dropDownContainerStyle={styles.label} labelStyle={{color: '#805943', fontWeight: 'bold'}} textStyle={{color: '#805943'}} placeholder="Select time"
+        setItems={setTime} dropDownContainerStyle={styles.label} labelStyle={{color: '#5C4033', fontWeight: 'bold'}} textStyle={{color: '#5C4033'}} placeholder="Select time"
       >
       </DropDownPicker>
       </View>

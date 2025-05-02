@@ -28,7 +28,7 @@ export default function LoginPage({ navigation, setIsLoggedIn }) {
         onChangeText={(text) => setPassword(text)}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
+      <Button title="Login" onPress={handleLogin} color="#5C4033"/>
     </View>
   );
 }
@@ -45,10 +45,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 30,
     textAlign: 'center',
+    color: '#abc270',
   },
   input: {
     height: 50,
-    borderColor: '#ccc',
+    borderColor: '#abc270',
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 15,

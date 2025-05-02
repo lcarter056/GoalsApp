@@ -43,6 +43,7 @@ export default function ProfilePage() {
   );
 
   return (
+    <>
     <View style={styles.container}>
         <View style={styles.avatarContainer}>
            <Image
@@ -52,15 +53,15 @@ export default function ProfilePage() {
            <View style={styles.infoRow}>
               <Text style={styles.name}>goalSetter</Text>
               <View style={styles.streakContainer}> 
-                <Text style={styles.streak}>🔥</Text>
+                <Text style={styles.streak}>🪴</Text>
                 <Text style={styles.streakText}>3</Text>
               </View>
             </View>
           </View>
         </View>
-  
+    
 
-      <View style={styles.section}>
+      <View style={styles.section} >
         <Text style={styles.sectionTitle}>Favorite Activities:</Text>
         {favs.length === 0 ? (
           <Text style={styles.noFavsText}>No favorites yet.</Text>
@@ -74,18 +75,17 @@ export default function ProfilePage() {
                 <Icon
                   name="heart"
                   size={20}
-                  color="#ff4d4d"
+                  color="#fff"
                   style={styles.heartIcon}
                 />
                 </TouchableOpacity>
                 <Text style={styles.activityItem}>{item}</Text>
               </View>
-              
             )}
           />
         )}
       </View>
-    </View>
+    </>
   );
 }
 
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 60,
-    backgroundColor: "#fff",
+    backgroundColor: "#abc270",
     alignItems: "center"
   },
   avatarContainer: {
@@ -118,7 +118,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textAlign: "left",
     marginLeft: -10,
-    marginTop: 10
+    marginTop: 10,
+    color:'#5C4033'
   },
   streakContainer: {
     flexDirection: "row",
@@ -132,19 +133,22 @@ const styles = StyleSheet.create({
   streakText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#ff4d4d",
+    color: "#fff",
     marginTop: 10
   },
   section: {
     flex: 1,
-    width: "90%"
+    width: "100%",
+    backgroundColor:'#abc270',
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 20,
     marginBottom: 25,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    color: '#5C4033',
+    marginLeft: 15
   },
   activityRow: {
     flexDirection: "row",
@@ -153,15 +157,18 @@ const styles = StyleSheet.create({
     marginLeft: 10
   },
   heartIcon: {
-    marginRight: 15
+    marginLeft: 25
   },
   activityItem: {
     fontSize: 16,
-    flex: 1
+    flex: 1,
+    marginLeft: 15,
+    color:'#5C4033'
   },
   noFavsText: {
     paddingHorizontal: 10,
     fontStyle: "italic",
-    color: "#666"
+    color: "#5C4033",
+    marginLeft: 30,
   }
 });
