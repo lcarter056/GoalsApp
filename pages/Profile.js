@@ -1,22 +1,46 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; 
+import React, { useState } from "react";
+import { View, Text , Button , StyleSheet, FlatList, TouchableOpacity, Image} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export default function ProfilePage() {
-  const [favoriteActivities, setFavoriteActivities] = useState([
-    { id: '1', name: 'Run at Olmos Park', checked: true },
-    { id: '2', name: 'Study at Nowhere Cafe', checked: true },
-    { id: '3', name: 'Morning Yoga', checked: true },
-    { id: '4', name: 'Read at Library', checked: true },
-  ]);
+  const [favs, setFavs] = useState([]);
 
-  const toggleCheck = (id) => {
-    setFavoriteActivities((prev) =>
-      prev.map((activity) =>
-        activity.id === id ? { ...activity, checked: !activity.checked } : activity
-      )
-    );
+  const getData = async () => {
+    try {
+      let favActivities = await AsyncStorage.getItem("FavActs");
+      if (favActivities) {
+        setFavs(JSON.parse(favActivities));
+      } else {
+        setFavs([]);
+      }
+    } catch (error) {
+      console.error("Error getting fav activities from profile page", error);
+    }
   };
+
+  const removeActs = async (act) => {
+    try {
+      let currList = await AsyncStorage.getItem("FavActs");
+      if (currList != null) {
+        currList = JSON.parse(currList);
+      } else {
+        currList = [];
+      }
+      currList = currList.filter((item) => item !== act);
+      await AsyncStorage.setItem("FavActs", JSON.stringify(currList));
+      await getData();
+    } catch (error) {
+      console.error("Error removing activity from the list", error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+    getData();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -33,18 +57,33 @@ export default function ProfilePage() {
               </View>
             </View>
           </View>
+        </View>
+  
+
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Favorite Activities:</Text>
-        <FlatList
-          data={favoriteActivities.filter(item => item.checked)}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={styles.activityRow} onPress={() => toggleCheck(item.id)}>
-              <Icon name="heart" size={20} color="#ff4d4d" style={styles.heartIcon} />
-              <Text style={styles.activityItem}>{item.name}</Text>
-            </TouchableOpacity>
-          )}
-        />
+        {favs.length === 0 ? (
+          <Text style={styles.noFavsText}>No favorites yet.</Text>
+        ) : (
+          <FlatList
+            data={favs}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.activityRow}>
+                <TouchableOpacity onPress={() => removeActs(item)}>
+                <Icon
+                  name="heart"
+                  size={20}
+                  color="#ff4d4d"
+                  style={styles.heartIcon}
+                />
+                </TouchableOpacity>
+                <Text style={styles.activityItem}>{item}</Text>
+              </View>
+              
+            )}
+          />
+        )}
       </View>
     </View>
   );
@@ -54,71 +93,75 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 60,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center"
   },
   avatarContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 30,
-    width: '100%',
+    width: "100%"
   },
   avatar: {
     width: 180,
     height: 180,
-    borderRadius: 90,
+    borderRadius: 90
   },
   infoRow: {
-    flexDirection: 'row',
-    width: '60%',
+    flexDirection: "row",
+    width: "60%",
     marginLeft: 10,
-    justifyContent: 'space-between',
+    justifyContent: "space-between"
   },
   name: {
     fontSize: 22,
-    fontWeight: '600',
-    textAlign: 'left',
+    fontWeight: "600",
+    textAlign: "left",
     marginLeft: -10,
-    marginTop: 10,
+    marginTop: 10
   },
   streakContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center"
   },
   streak: {
     fontSize: 20,
     marginRight: 4,
-    marginTop: 10,
+    marginTop: 10
   },
   streakText: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#ff4d4d',
-    marginTop: 10,
+    fontWeight: "bold",
+    color: "#ff4d4d",
+    marginTop: 10
   },
   section: {
     flex: 1,
-    width: '90%',
+    width: "90%"
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 20,
     marginBottom: 25,
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   activityRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 15,
-    marginLeft: 30,
+    marginLeft: 10
   },
   heartIcon: {
-    marginRight: 15,
-    color: '#fda769'
+    marginRight: 15
   },
   activityItem: {
     fontSize: 16,
+    flex: 1
   },
+  noFavsText: {
+    paddingHorizontal: 10,
+    fontStyle: "italic",
+    color: "#666"
+  }
 });
-

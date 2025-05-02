@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, Button, TouchableOpacity } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 
@@ -25,21 +25,68 @@ export default function ActivitiesPage() {
   }
 
   return (
-    <View>
-      <Text>Activities Page</Text>
-
-      <DropDownPicker items={time} open={open} 
+    <View style={styles.background}>
+  <Text style={{ color: '#805943', fontWeight: 'bold', fontSize: 23, paddingBottom: 30, marginTop: -30 }}>Choose an activity category!</Text>
+    <View style = {styles.dropDown}>
+      <DropDownPicker style={styles.dropDown} items={time} open={open} 
       value={value} setOpen={setOpen} setValue={setValue} onChange={item => {setValue(item.value)}}
-        setItems={setTime} placeholder="Select time"
+        setItems={setTime} dropDownContainerStyle={styles.label} labelStyle={{color: '#805943', fontWeight: 'bold'}} textStyle={{color: '#805943'}} placeholder="Select time"
       >
       </DropDownPicker>
-      <Button title="Exercise" onPress={() => loadPage('Exercise')}>  </Button>
-      <Button title="Restaurant" onPress={() => loadPage('Restaurant')}>  </Button>
-      <Button title="Hang Out" onPress={() => loadPage('Hang Out')}>  </Button>
-      <Button title="Study Spot" onPress={() => loadPage('Study Spot')}>  </Button>
-      
-     
-
+      </View>
+      <TouchableOpacity style= {styles.button}
+         onPress={() => loadPage('Exercise')}> 
+        <Text style={{ color: 'white', fontSize: 18 }} >Exercise</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style= {styles.button}
+       onPress={() => loadPage('Restaurant')}>
+        <Text style={{ color: 'white', fontSize: 18 }}>Restaurant</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style= {styles.button}
+       onPress={() => loadPage('Hang Out')}>  
+       <Text style={{ color: 'white', fontSize: 18 }}>Hang out</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style= {styles.button}
+      onPress={() => loadPage('Study Spot')}>
+        <Text style={{ color: 'white', fontSize: 18 }}>Study Spot</Text>
+      </TouchableOpacity>
     </View>
+
   );
+
 }  
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center', 
+    width: '100%',
+    height: '100%', 
+    backgroundColor: '#ABC270'
+  },
+
+  button: {     
+        height: 55, 
+        marginTop: 40,
+        backgroundColor:'#6D803C',
+        width: 200,
+        alignItems: 'center',
+        justifyContent: 'center'
+  },
+
+  dropDown: {
+    width: 140,
+    backgroundColor: '#FFD996', 
+    borderColor: '#6D803C', 
+  }, 
+
+  dropDownContainer: {
+    width: 40
+  }, 
+  
+  label: {
+    backgroundColor: '#FFD996', 
+  }
+
+});

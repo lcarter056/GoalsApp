@@ -12,6 +12,9 @@ import GoalsPage from './pages/Goals';
 import ActivityPage from './pages/Activity';
 import SettingsPage from './pages/Settings';
 import LoginPage from './pages/LogIn';
+import * as Location from 'expo-location';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -66,6 +69,41 @@ function MainTabs({setIsLoggedIn}) {
     return <Ionicons name={iconName} size={size} color={color} />;
   };
 
+  const setFavs = async () => {
+    try {
+      const favs = await AsyncStorage.getItem('FavActs');
+      if(!favs){
+        await AsyncStorage.setItem('FavActs', JSON.stringify([]));
+      }
+  
+    }
+    catch (error) {
+    console.log('Error setting fav activites');
+    }
+    
+  }
+
+
+
+    useEffect(() => {
+      
+       async function getCurrentLocation() {
+         
+         let { status } = await Location.requestForegroundPermissionsAsync();
+         if (status !== 'granted') {
+           setErrorMsg('Permission to access location was denied');
+           return;
+         }
+   
+         let location = await Location.getCurrentPositionAsync({});
+         setLat(location.coords.latitude);
+         setLong(location.coords.longitude);
+       }
+   
+       getCurrentLocation();
+       setFavs();
+     }, []);
+     
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
