@@ -101,7 +101,8 @@ export default function GoalsPage({navigation}) {
         backgroundColor="#788546"
         padding={15}
       >
-        {(fill) => <Text>{Math.round(fill)}%</Text>}
+       {(fill) => (<Text style={{ color: '#5C4033', fontSize: 20,fontWeight: 'bold' }}>{Math.round(fill)}%
+      </Text>)}
       </AnimatedCircularProgress>
       <SectionList
           sections={sections}
@@ -177,6 +178,7 @@ const styles = StyleSheet.create({
   counter: {
     fontSize: 18,
     marginBottom: 10,
+   
   },
   subtitle: {
     fontSize: 20
@@ -184,6 +186,7 @@ const styles = StyleSheet.create({
   list: {
     marginTop: 10,
     width: '100%',
+    
   },
   listTitle: {
     fontSize: 18,
@@ -192,6 +195,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 5,
     paddingHorizontal: 10,
+    color: '#5C4033',
   },
   checkbox: {
     marginVertical: 5,
@@ -199,6 +203,7 @@ const styles = StyleSheet.create({
   },
   checkboxText: {
     textDecorationLine: 'none',
+    color:"#fff"
   },
   sectionHeader: {
     marginTop: 30,
@@ -230,7 +235,7 @@ const styles = StyleSheet.create({
   },
   removeText: {
     fontSize: 18,
-    color: '#fff',
+    color: '#5C4033',
   },
   settingsButton: {
     position: 'absolute',
@@ -239,7 +244,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#5C4033',
   },
 });
   /*const [lat, setLat] = useState(null);

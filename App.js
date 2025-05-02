@@ -12,7 +12,6 @@ import GoalsPage from './pages/Goals';
 import ActivityPage from './pages/Activity';
 import SettingsPage from './pages/Settings';
 import LoginPage from './pages/LogIn';
-import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -75,16 +74,12 @@ function MainTabs({setIsLoggedIn}) {
       if(!favs){
         await AsyncStorage.setItem('FavActs', JSON.stringify([]));
       }
-  
     }
     catch (error) {
     console.log('Error setting fav activites');
     }
     
   }
-
-
-
     useEffect(() => {
       
        async function getCurrentLocation() {
@@ -111,8 +106,8 @@ function MainTabs({setIsLoggedIn}) {
         tabBarStyle: hideTabBarOnScreens(route),
         tabBarIcon: ({ focused, color, size }) =>
           renderTabIcon(route.name, focused, color, size),
-        tabBarActiveTintColor: 'dodgerblue',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: '#abc270',
+        tabBarInactiveTintColor: '#5C4033',
       })}
     >
       <Tab.Screen name="Goals">
@@ -159,6 +154,7 @@ export default function App() {
             <Stack.Screen
               name="Activity"
               component={ActivityPage}
+              options={{headerShown: true}}
               initialParams={{
                 long: long !== null ? JSON.stringify(long).substring(0, 7) : null,
                 lat: lat !== null ? JSON.stringify(lat).substring(0, 7) : null,

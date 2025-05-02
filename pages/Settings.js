@@ -15,7 +15,7 @@ export default function SettingsPage({ route, setIsLoggedIn }) {
       <Text style={styles.value}>{password}</Text>
 
       <View style={styles.logoutButton}>
-        <Button title='Logout' onPress={handleLogout} color="#d9534f"/>
+        <Button title='Logout' onPress={handleLogout} color="#5C4033"/>
       </View>
     </View>
   );
@@ -25,17 +25,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    backgroundColor: '#fff',
+    backgroundColor: '#abc270',
   },
   label: {
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 20,
+    color:'#5C4033'
   },
   value: {
     fontSize: 16,
     marginTop: 8,
-    color: 'gray',
+    color: '#5C4033',
   },
   logoutButton: {
     marginTop: 40,
