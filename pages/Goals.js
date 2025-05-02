@@ -81,24 +81,24 @@ export default function GoalsPage({navigation}) {
     },
   ];
 
-return (
+  return (
     <View style={styles.container}>
       <View style={styles.headerConntainer}>
         <View style={styles.titleContainer}>
           <Text style={styles.subtitle}>Let's Get Started!</Text>
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('Settings', {
-          username:'yourUsername', password: 'yourPassword',
+          username:'goalSetter', password: 'goals',
         })}>
-          <Ionicons name="settings-outline" size={24} color="black" />
+          <Ionicons name="settings-outline" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
       <AnimatedCircularProgress
         size={150}
         width={15}
         fill={progress}
-        tintColor="#00e0ff"
-        backgroundColor="#fff"
+        tintColor="#5C4033"
+        backgroundColor="#788546"
         padding={15}
       >
         {(fill) => <Text>{Math.round(fill)}%</Text>}
@@ -118,14 +118,14 @@ return (
                   value={section.inputValue}
                   onChangeText={section.setInputValue}
                 />
-                 <Button title='Add Goal' onPress={() => addGoal(section.key)} />
+                 <Button title='Add Goal' onPress={() => addGoal(section.key)} color='#788546' />
           </View>
       ) : (
           <View style={styles.goalRow}>
             <View style={{flex: 1}}>
               <BouncyCheckbox
                 size={25}
-                fillColor="#00e0ff"
+                fillColor="#5C4033"
                 unfillColor="#FFFFFF"
                 text={item.text}
                 isChecked={item.checked}
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
-    backgroundColor: '#fff',
+    backgroundColor: '#abc270',
     alignItems: 'center',
     padding: 20,
   },
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   input: {
-    borderColor: '#ccc',
+    borderColor: '#fff',
     borderWidth: 1,
     padding: 8,
     marginVertical: 8,
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   },
   removeText: {
     fontSize: 18,
-    color: '#ff4d4d',
+    color: '#fff',
   },
   settingsButton: {
     position: 'absolute',
@@ -238,7 +238,8 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 20,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: '#fff',
   },
 });
   /*const [lat, setLat] = useState(null);
